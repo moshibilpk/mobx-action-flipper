@@ -150,7 +150,7 @@ const generatePayload = ({
 
   return {
     id: (Math.random() + 1).toString(36).substring(7) + Date.now(),
-    startTime,
+    startTime: startTime.toISOString(),
     time: `${stringifyNumber(startTime.getHours())}:${stringifyNumber(
       startTime.getMinutes(),
     )}:${stringifyNumber(startTime.getSeconds())}.${stringifyNumber(
