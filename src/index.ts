@@ -1,39 +1,19 @@
 import {addPlugin} from 'react-native-flipper';
 import {spy, toJS} from 'mobx';
+import {Payload, PayloadArgs, Stores, Event} from './types';
 
-let isFirstRun = true;
 let currentConnection: any = null;
 let storeRecord: null | Stores = null;
 const storeActionMethods: {[name: string]: string[]} = {};
-const payloadsArray: any[] = [];
-
-type PayloadArgs = {
-  name: string;
-  args?: any[];
-  tree: any;
-  before: any;
-  startTime: Date;
-  storeName: string;
-};
-
-type Event = {
-  type: string;
-  name: string;
-  object: any;
-  arguments: any[];
-  spyReportEnd?: true;
-};
-
-type Stores = {[name: string]: any};
+const payloadsArray: Payload[] = [];
 
 export const debugMobxActions = (stores: Stores) => {
   //@ts-ignore
-  if (!__DEV__ || !isFirstRun) {
+  if (!__DEV__ || currentConnection) {
     return;
   }
   initPlugin(stores);
   spy(makeMobxDebugger() as any);
-  isFirstRun = false;
 };
 
 const initPlugin = (stores: Stores) => {
@@ -144,7 +124,7 @@ const generatePayload = ({
   before,
   startTime,
   storeName,
-}: PayloadArgs) => {
+}: PayloadArgs): Payload => {
   const stringifyNumber = (input: number) =>
     input < 10 ? `0${input}` : `${input}`;
 
