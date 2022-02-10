@@ -1,0 +1,34 @@
+{
+  "name": "mobx-action-flipper",
+  "version": "1.0.0",
+  "description": "Mobx react native middleware for flipper",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Charles <charles@vanlennep.co.uk> (https://github.com/chvanlennep)",
+  "homepage": "https://github.com/chvanlennep/mobx-action-flipper",
+  "repository": {
+    "url": "https://github.com/chvanlennep/mobx-action-flipper",
+    "type": "git"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "peerDependencies": {
+    "react-native": "^0.64.0",
+    "react-native-flipper": "^0.87.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.25.0",
+    "prettier": "2.2.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "mobx": "^6.3.0",
+    "react-native-flipper": "^0.87.0"
+  }
+}
