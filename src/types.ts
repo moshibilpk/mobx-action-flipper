@@ -29,4 +29,4 @@ export type Payload = {
   storeName: string;
 };
 
-export type Stores = {[name: string]: object};
+export type Stores = {[name: string]: any};
