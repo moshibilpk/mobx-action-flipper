@@ -1,6 +1,6 @@
 {
   "name": "mobx-action-flipper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Mobx react native middleware for flipper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

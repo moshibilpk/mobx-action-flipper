@@ -130,7 +130,7 @@ const makeMobxDebugger = () => {
         try {
           currentConnection.send('action', payloadToSend);
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
         payloadsArray.pop();
       }, 100);
