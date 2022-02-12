@@ -7,7 +7,12 @@
   "scripts": {
     "build": "tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "react native",
+    "mobx",
+    "flipper",
+    "debugger"
+  ],
   "author": "Charles <charles@vanlennep.co.uk> (https://github.com/chvanlennep)",
   "homepage": "https://github.com/chvanlennep/mobx-action-flipper",
   "repository": {
