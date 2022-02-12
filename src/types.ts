@@ -27,6 +27,11 @@ export type Payload = {
   before: object;
   after: object;
   storeName: string;
+  isAsyncStoragePresent?: boolean;
+};
+
+export type InitialConfig = {
+  asyncStorageOptionsEnabled: boolean;
 };
 
 export type Stores = {[name: string]: any};

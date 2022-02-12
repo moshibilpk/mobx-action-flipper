@@ -1,6 +1,6 @@
-# Mobx Action Debugger in Flipper
+# React Native Mobx Action Debugger
 
-Flipper plugin for MobX action debugging in React Native.
+React Native middleware for MobX Action debugging with Flipper.
 
 ## Get Started
 
@@ -12,17 +12,32 @@ yarn add mobx-action-flipper react-native-flipper
 cd ios && pod install
 ```
 
-2. Add the middleware:
+2. Middleware configuration:
 
-- MobX
+Note: this function should be called only once at app startup. Further calls will have no effect.
 
 ```javascript
 import {debugMobxActions} from 'mobx-action-flipper';
 
-const firstStore = new FirstStore(); // Mobx store
-const secondStore = new SecondStore(); // Any number of stores can be passed into function
+// MobX stores:
+const firstStore = new FirstStore();
+const secondStore = new SecondStore();
 
+// Any number of stores can be passed in as an object:
 debugMobxActions({firstStore, secondStore});
+```
+
+If your MobX stores are persisted via AsyncStorage, pass AsyncStorage as the second argument to be able to wipe persisted MobX data from Flipper:
+
+```javascript
+import {debugMobxActions} from 'mobx-action-flipper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// MobX stores:
+const firstStore = new FirstStore();
+const secondStore = new SecondStore();
+
+debugMobxActions({firstStore, secondStore}, AsyncStorage);
 ```
 
 3. Install [flipper-plugin-mobx-action-debugger](https://github.com/chvanlennep/flipper-plugin-mobx-action-debugger) in Flipper desktop client:

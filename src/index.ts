@@ -1,31 +1,34 @@
+//@ts-ignore
+import {DevSettings} from 'react-native';
 import {addPlugin} from 'react-native-flipper';
 import {spy, toJS} from 'mobx';
 import {Payload, PayloadArgs, Stores, Event} from './types';
 
 let currentConnection: any = null;
 let storeRecord: null | Stores = null;
+let asyncStorageRecord: null | any = null;
 const storeActionMethods: {[name: string]: string[]} = {};
 const payloadsArray: Payload[] = [];
 
-export const debugMobxActions = (stores: Stores) => {
+export const debugMobxActions = (stores: Stores, AsyncStorage?: any) => {
   //@ts-ignore
   if (!__DEV__ || currentConnection) {
     return;
   }
-  initPlugin(stores);
+  initPlugin(stores, AsyncStorage);
   spy(makeMobxDebugger() as any);
 };
 
-const initPlugin = (stores: Stores) => {
+const initPlugin = (stores: Stores, AsyncStorage?: any) => {
   if (currentConnection === null) {
     storeRecord = stores;
+    asyncStorageRecord = AsyncStorage;
     addPlugin({
       getId() {
         return 'mobx-action-debugger';
       },
       onConnect(connection) {
         currentConnection = connection;
-
         const startTime = new Date();
         const payload = generatePayload({
           name: 'INIT',
@@ -34,7 +37,26 @@ const initPlugin = (stores: Stores) => {
           before: {},
           storeName: '',
         });
-        currentConnection.send('init', payload);
+        connection.send('init', payload);
+        connection.receive('clearStorage', async () => {
+          if (!AsyncStorage) {
+            return;
+          }
+          try {
+            const persistedStorageKeys: string[] = await AsyncStorage.getAllKeys();
+            const sharedKeys: string[] = Object.keys(storeRecord ?? {})
+              .map((storeName) =>
+                persistedStorageKeys.some((store) => storeName === store)
+                  ? storeName
+                  : '',
+              )
+              .filter(Boolean);
+            await AsyncStorage.multiRemove(sharedKeys);
+            DevSettings.reload();
+          } catch (error) {
+            console.error(error);
+          }
+        });
       },
       onDisconnect() {},
       runInBackground() {
@@ -141,5 +163,6 @@ const generatePayload = ({
     before,
     storeName,
     after: tree,
+    isAsyncStoragePresent: Boolean(asyncStorageRecord?.getAllKeys),
   };
 };
