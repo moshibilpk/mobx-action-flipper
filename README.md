@@ -2,7 +2,7 @@
 
 React Native middleware for MobX Action debugging with Flipper.
 
-## Get Started
+## Installation
 
 1. Install [mobx-action-flipper](https://github.com/chvanlennep/mobx-action-flipper) middleware and `react-native-flipper` in your React Native app:
 
