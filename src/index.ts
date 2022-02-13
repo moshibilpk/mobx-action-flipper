@@ -27,28 +27,32 @@ const initPlugin = (stores: Stores, AsyncStorage?: any) => {
       },
       onConnect(connection) {
         currentConnection = connection;
-        connection.send('init', {
-          isAsyncStoragePresent: Boolean(AsyncStorage?.getAllKeys),
-        });
-        connection.receive('clearStorage', async () => {
-          if (!AsyncStorage) {
-            return;
-          }
-          try {
-            const persistedStorageKeys: string[] = await AsyncStorage.getAllKeys();
-            const sharedKeys: string[] = Object.keys(storeRecord ?? {})
-              .map((storeName) =>
-                persistedStorageKeys.some((store) => storeName === store)
-                  ? storeName
-                  : '',
-              )
-              .filter(Boolean);
-            await AsyncStorage.multiRemove(sharedKeys);
-            DevSettings.reload();
-          } catch (error) {
-            console.error(error);
-          }
-        });
+        try {
+          connection.send('init', {
+            isAsyncStoragePresent: Boolean(AsyncStorage?.getAllKeys),
+          });
+          connection.receive('clearStorage', async () => {
+            if (!AsyncStorage) {
+              return;
+            }
+            try {
+              const persistedStorageKeys: string[] = await AsyncStorage.getAllKeys();
+              const sharedKeys: string[] = Object.keys(storeRecord ?? {})
+                .map((storeName) =>
+                  persistedStorageKeys.some((store) => storeName === store)
+                    ? storeName
+                    : '',
+                )
+                .filter(Boolean);
+              await AsyncStorage.multiRemove(sharedKeys);
+              DevSettings.reload();
+            } catch (error) {
+              console.warn(error);
+            }
+          });
+        } catch (error) {
+          console.warn(error);
+        }
       },
       onDisconnect() {},
       runInBackground() {
@@ -122,7 +126,7 @@ const makeMobxDebugger = () => {
         try {
           currentConnection.send('action', payloadToSend);
         } catch (error) {
-          console.error(error);
+          console.warn(error);
         }
         payloadsArray.pop();
       }, 100);
