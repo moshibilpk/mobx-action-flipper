@@ -6,7 +6,6 @@ import {Payload, PayloadArgs, Stores, Event} from './types';
 
 let currentConnection: any = null;
 let storeRecord: null | Stores = null;
-let asyncStorageRecord: null | any = null;
 const storeActionMethods: {[name: string]: string[]} = {};
 const payloadsArray: Payload[] = [];
 
@@ -22,13 +21,15 @@ export const debugMobxActions = (stores: Stores, AsyncStorage?: any) => {
 const initPlugin = (stores: Stores, AsyncStorage?: any) => {
   if (currentConnection === null) {
     storeRecord = stores;
-    asyncStorageRecord = AsyncStorage;
     addPlugin({
       getId() {
         return 'mobx-action-debugger';
       },
       onConnect(connection) {
         currentConnection = connection;
+        connection.send('init', {
+          isAsyncStoragePresent: Boolean(AsyncStorage?.getAllKeys),
+        });
         connection.receive('clearStorage', async () => {
           if (!AsyncStorage) {
             return;
@@ -154,6 +155,5 @@ const generatePayload = ({
     before,
     storeName,
     after: tree,
-    isAsyncStoragePresent: Boolean(asyncStorageRecord?.getAllKeys),
   };
 };
