@@ -29,15 +29,6 @@ const initPlugin = (stores: Stores, AsyncStorage?: any) => {
       },
       onConnect(connection) {
         currentConnection = connection;
-        const startTime = new Date();
-        const payload = generatePayload({
-          name: 'INIT',
-          tree: {},
-          startTime,
-          before: {},
-          storeName: '',
-        });
-        connection.send('init', payload);
         connection.receive('clearStorage', async () => {
           if (!AsyncStorage) {
             return;
