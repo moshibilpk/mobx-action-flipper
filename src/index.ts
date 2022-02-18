@@ -30,6 +30,7 @@ const initPlugin = (stores: Stores, AsyncStorage?: any) => {
         try {
           connection.send('init', {
             isAsyncStoragePresent: Boolean(AsyncStorage?.getAllKeys),
+            stores: Object.keys(storeRecord ?? {}),
           });
           connection.receive('clearStorage', async () => {
             if (!AsyncStorage) {
@@ -147,7 +148,10 @@ const generatePayload = ({
     input < 10 ? `0${input}` : `${input}`;
 
   return {
-    id: (Math.random() + 1).toString(36).substring(7) + Date.now(),
+    id:
+      (Math.random() + 1).toString(36).substring(7) +
+      Date.now() +
+      (Math.random() + 1).toString(36).substring(7),
     startTime: startTime.toISOString(),
     time: `${stringifyNumber(startTime.getHours())}:${stringifyNumber(
       startTime.getMinutes(),
