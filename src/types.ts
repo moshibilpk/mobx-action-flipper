@@ -21,6 +21,7 @@ export type Payload = {
     type: string;
     payload: any;
   };
+  actionName: string;
   took: string;
   startTime: string;
   time: string;

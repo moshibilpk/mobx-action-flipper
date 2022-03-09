@@ -148,10 +148,7 @@ const generatePayload = ({
     input < 10 ? `0${input}` : `${input}`;
 
   return {
-    id:
-      (Math.random() + 1).toString(36).substring(7) +
-      Date.now() +
-      (Math.random() + 1).toString(36).substring(7),
+    id: (Math.random() + 1).toString(36).substring(7) + new Date().getTime(),
     startTime: startTime.toISOString(),
     time: `${stringifyNumber(startTime.getHours())}:${stringifyNumber(
       startTime.getMinutes(),
@@ -160,8 +157,9 @@ const generatePayload = ({
     )}`,
     took: '',
     action: {type: name, payload: args ? args[0] : undefined},
-    before,
+    actionName: name,
     storeName,
+    before,
     after: tree,
   };
 };
