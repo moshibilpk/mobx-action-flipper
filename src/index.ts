@@ -8,7 +8,6 @@ let currentConnection: any = null;
 let storeRecord: null | Stores = null;
 const storeActionMethods: {[name: string]: string[]} = {};
 const payloadsArray: Payload[] = [];
-
 export const debugMobxActions = (stores: Stores, AsyncStorage?: any) => {
   //@ts-ignore
   if (!__DEV__ || currentConnection) {
@@ -17,6 +16,7 @@ export const debugMobxActions = (stores: Stores, AsyncStorage?: any) => {
   initPlugin(stores, AsyncStorage);
   spy(makeMobxDebugger() as any);
 };
+const cycle = require('cycle');
 
 const initPlugin = (stores: Stores, AsyncStorage?: any) => {
   if (currentConnection === null) {
@@ -103,7 +103,7 @@ const makeMobxDebugger = () => {
           name: event.name,
           storeName,
           tree: {},
-          before,
+          before: cycle.decycle(before),
           startTime,
         });
       }
